@@ -1,0 +1,38 @@
+<h1 id="hexo-leancloud-counter-security"><a href="#hexo-leancloud-counter-security" class="headerlink" title="hexo-leancloud-counter-security"></a>hexo-leancloud-counter-security</h1><p><a href="https://www.npmjs.com/package/hexo-leancloud-counter-security"><img src="https://img.shields.io/npm/v/hexo-leancloud-counter-security?style=flat-square" alt="npm-image"></a><br><a href="https://nodejs.org/en/download/releases"><img src="https://img.shields.io/node/v/hexo-leancloud-counter-security?style=flat-square" alt="node-image"></a><br><a href="https://hexo.io/"><img src="https://img.shields.io/badge/hexo-%3E%3D%203.0-blue?style=flat-square" alt="hexo-image"></a><br><a href="https://travis-ci.org/theme-next/hexo-leancloud-counter-security?branch=master"><img src="https://img.shields.io/travis/theme-next/hexo-leancloud-counter-security/master?style=flat-square" alt="travis-image"></a><br><a href="LICENSE"><img src="https://img.shields.io/npm/l/hexo-leancloud-counter-security?style=flat-square" alt="lic-image"></a></p>
+<p>A plugin to fix a serious security bug in leancloud visitor counter for NexT theme site and other site that integrated this function using a similar way.</p>
+<p>Documentation how to set the counter up and running safely aviable in <a href="https://github.com/theme-next/hexo-theme-next/blob/master/docs/LEANCLOUD-COUNTER-SECURITY.md">English</a> or <a href="https://github.com/theme-next/hexo-theme-next/blob/master/docs/zh-CN/LEANCLOUD-COUNTER-SECURITY.md">Chinese</a> languages.</p>
+<p>And you can also read full explanation of current problem <a href="https://leaferx.online/2018/02/11/lc-security/">here</a>.</p>
+<h2 id="Installation"><a href="#Installation" class="headerlink" title="Installation"></a>Installation</h2><p><img src="https://img.shields.io/github/languages/code-size/theme-next/hexo-leancloud-counter-security?style=flat-square" alt="size-image"><br><a href="https://www.npmjs.com/package/hexo-leancloud-counter-security"><img src="https://img.shields.io/npm/dm/hexo-leancloud-counter-security?style=flat-square" alt="dm-image"></a><br><a href="https://www.npmjs.com/package/hexo-leancloud-counter-security"><img src="https://img.shields.io/npm/dt/hexo-leancloud-counter-security?style=flat-square" alt="dt-image"></a></p>
+<pre><code class="bash">npm install hexo-leancloud-counter-security
+</code></pre>
+<h2 id="Usage"><a href="#Usage" class="headerlink" title="Usage"></a>Usage</h2><p>Activate this plugin in hexo’s <code>_config.yml</code> (which locates in the root dir of your blog) by filling those options:</p>
+<pre><code class="yml">leancloud_counter_security:
+  enable_sync: true
+  app_id: &lt;your app id&gt;
+  app_key: &lt;your app key&gt;
+  server_url: &lt;your server url&gt; # Required for apps from CN region, e.g. https://leancloud.cn
+  username: &lt;your username&gt; # Will be asked while deploying if is left blank
+  password: &lt;your password&gt; # Recommmended to be left blank. Will be asked while deploying if is left blank
+</code></pre>
+<p>If <code>leancloud_counter_security</code> not specified (or commented), plugin will totally disabled.</p>
+<h3 id="NexT-theme"><a href="#NexT-theme" class="headerlink" title="NexT theme"></a>NexT theme</h3><p>This plugin integrated in «NexT» and after plugin enabled in main Hexo config, need to enable options in NexT config:</p>
+<pre><code class="yml">leancloud_visitors:
+  enable: true
+  app_id: &lt;your app id&gt;
+  app_key: &lt;your app key&gt;
+  # Dependencies: https://github.com/theme-next/hexo-leancloud-counter-security
+  security: true
+</code></pre>
+<p>You should build the Leancloud background first to make the counter active.</p>
+<p>After that, install this plugin and config it to make the counter safe.</p>
+<h3 id="Console-Command"><a href="#Console-Command" class="headerlink" title="Console Command"></a>Console Command</h3><pre><code class="bash">hexo lc-counter register &lt;username&gt; &lt;password&gt;
+</code></pre>
+<p>or</p>
+<pre><code class="bash">hexo lc-counter r &lt;username&gt; &lt;password&gt;
+</code></pre>
+<p>Register a user in your Leancloud database for authority control.</p>
+<h2 id="TroubleShooting"><a href="#TroubleShooting" class="headerlink" title="TroubleShooting"></a>TroubleShooting</h2><h3 id="fail-to-sync-records-to-the-leancloud-database"><a href="#fail-to-sync-records-to-the-leancloud-database" class="headerlink" title="fail to sync records to the leancloud database"></a>fail to sync records to the leancloud database</h3><p>For purpose of avoiding the 429 error code (Too Many Request) from leancloud, this plugin use a local database to store the records which have been successfully synchronized to the leancloud. Only the records that are not in the local database will be synchronized. This feature reduces the request quantity to avoid 429 error. The local databases is a json file named <code>leancloud.memo</code> in <code>&lt;blog directory&gt;/source</code>. Delete the <code>leancloud.memo</code> will not cause other flaws.</p>
+<p>If you failed to sync records to the leancloud and you are sure about the plugin causes the fault. You can delete the <code>leancloud.memo</code> and deploy again. The command is following.</p>
+<pre><code class="bash">rm &lt;blog directory&gt;/source/leancloud.memo
+hexo d
+</code></pre>
